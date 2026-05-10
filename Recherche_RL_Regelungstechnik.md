@@ -9,7 +9,7 @@ Untersucht wurde, ob die Grundidee dieses Repositories bereits in ähnlicher For
 - **Regelziel Spannungsregelung**
 - **Fokus auf Regelungstechnik / Leistungselektronik**, nicht auf allgemeines RL
 
-Als interne Referenz für das Repo-Konzept wurden insbesondere `/home/runner/work/RL-Regler-Tiefsetzsteller-/RL-Regler-Tiefsetzsteller-/Grundsystem.md` und `/home/runner/work/RL-Regler-Tiefsetzsteller-/RL-Regler-Tiefsetzsteller-/Grundlagen_Tiefsetzsteller.md` verwendet.
+Als interne Referenz für das Repo-Konzept wurden insbesondere `Grundsystem.md` und `Grundlagen_Tiefsetzsteller.md` verwendet.
 
 ---
 
