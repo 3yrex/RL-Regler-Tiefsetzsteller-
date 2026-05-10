@@ -1,393 +1,298 @@
-# Recherche: Reinforcement Learning in der Regelungstechnik für Tiefsetzsteller
+# Wissenschaftliche Recherche: Reinforcement Learning zur Regelung von Tiefsetzstellern
 
-## Ziel der Recherche
+## 1. Zielsetzung und Forschungsfrage
 
-Untersucht wurde, ob die Grundidee dieses Repositories bereits in ähnlicher Form umgesetzt wurde:
+Diese Recherche untersucht, ob die in diesem Repository formulierte Grundidee bereits in der Fachliteratur oder in öffentlich zugänglichen Implementierungen umgesetzt wurde. Ausgangspunkt ist das in `Grundsystem.md` und `Grundlagen_Tiefsetzsteller.md` beschriebene Konzept:
 
-- **RL-/KI-basierte Regelung eines Tiefsetzstellers (Buck-Konverters)**
-- **direkte Vorgabe des Duty-Cycle / Tastverhältnisses**
-- **Regelziel Spannungsregelung**
-- **Fokus auf Regelungstechnik / Leistungselektronik**, nicht auf allgemeines RL
+- Regelung eines **Tiefsetzstellers (Buck-Konverters)**,
+- **direkte Ausgabe des Duty-Cycle** durch eine RL-Policy,
+- **Spannungsregelung** als primäre Regelungsaufgabe,
+- Start mit einem **idealen gemittelten Modell**,
+- spätere Erweiterung um **Sollwertsprünge, Rampen und Lastsprünge**.
 
-Als interne Referenz für das Repo-Konzept wurden insbesondere `Grundsystem.md` und `Grundlagen_Tiefsetzsteller.md` verwendet.
+Daraus ergibt sich folgende Forschungsfrage:
 
----
-
-## Kurzfazit
-
-**Ja – das Grundkonzept wurde bereits mehrfach umgesetzt.**
-
-Es gibt bereits:
-
-1. **direkt verwandte Arbeiten** zur RL-Regelung von Buck-Konvertern,
-2. **mehrere öffentliche Implementierungen** in MATLAB/Simulink,
-3. **Paper-Verweise** auf wissenschaftliche Veröffentlichungen mit sehr ähnlicher Zielsetzung.
-
-Die Idee des Repositories ist also **fachlich relevant, aber nicht grundsätzlich neu**.  
-Das mögliche Alleinstellungsmerkmal dieses Repos liegt eher in:
-
-- der **sauberen deutschsprachigen Aufarbeitung**,
-- der **systematischen Gegenüberstellung** zu klassischer Regelung,
-- der **schrittweisen Untersuchung** von konstantem Sollwert, Sollwertsprüngen und Lastsprüngen,
-- und einem möglichen **Vergleich mehrerer RL-Verfahren unter identischen Randbedingungen**.
+> **Ist die RL-basierte direkte Regelung eines Buck-Konverters über das Tastverhältnis bereits Stand der Forschung, und in welchem Ausmaß entspricht bestehende Literatur dem hier verfolgten regelungstechnischen Ansatz?**
 
 ---
 
-## Vorgehen und Quellenlage
+## 2. Methodisches Vorgehen
 
-Die Recherche wurde auf **RL in der Regelungstechnik und leistungselektronischen Wandlern** fokussiert.  
-Berücksichtigt wurden vor allem:
+Die Recherche wurde auf Arbeiten aus den Bereichen **Reinforcement Learning**, **Regelungstechnik** und **Leistungselektronik** eingegrenzt. Berücksichtigt wurden nur Quellen, die inhaltlich mindestens einen der folgenden Punkte abdecken:
 
-- Paper-Verweise in öffentlich zugänglichen Repositories,
-- Reproduktions-Repositories,
-- Implementierungen in MATLAB/Simulink,
-- angrenzende Arbeiten, wenn sie methodisch ähnlich sind.
+1. RL-basierte Regelung von **Buck- oder verwandten DC-DC-Wandlern**,
+2. **direkte Stellgrößenbildung** über Duty-Cycle bzw. Duty-Ratio,
+3. Fokus auf **Spannungsregelung** oder eng verwandte Aufgaben,
+4. methodische Nähe zu modellbasierten oder gemittelten Wandlerbeschreibungen.
 
-Hinweis: Einige Verlagsseiten waren aus der Laufzeitumgebung nicht direkt abrufbar. In diesen Fällen wurden **öffentlich sichtbare Repository-Beschreibungen und README-Dateien** als Quelle für Titel, Einordnung und Kontext genutzt.
+Die Auswertung ist zweigeteilt:
 
----
+- **wissenschaftliche Literatur / paper-nahe Quellen**,
+- **öffentliche GitHub-Repositories als gesonderte Implementierungsquellen**.
 
-## Abgleich mit dem Repo-Konzept
-
-Das hiesige Repo beschreibt im Kern:
-
-- einen **Buck-Konverter / Tiefsetzsteller**,
-- eine **Policy**, die direkt das Tastverhältnis \(\tau_g\) ausgibt,
-- eine **Spannungsregelung** über \(u_C\),
-- einen Start im **idealen gemittelten Modell**,
-- später mögliche Erweiterungen auf **Sollwertsprünge, Rampen und Lastsprünge**,
-- optional beobachtbare Zustände wie **\(i_L\), \(u_C\)** und evtl. **Störgröße \(z\)**.
-
-Genau diese Struktur taucht in mehreren RL-Arbeiten zur Leistungselektronik bereits auf.
+Hinweis zur Quellenlage: Einige Verlagsseiten waren aus der Laufzeitumgebung nicht direkt abrufbar. In diesen Fällen wurden öffentlich sichtbare Repository-Angaben, README-Texte und offen zugängliche Projektbeschreibungen als Sekundärbeleg genutzt. Für eine formale Abschlussarbeit sollten diese Angaben später zusätzlich über Bibliothekszugänge oder DOI-Recherche verifiziert werden.
 
 ---
 
-## Hochrelevante Quellen
+## 3. Einordnung des Repository-Konzepts
 
-### 1) Tianxiao Yang et al. / Shanghai University of Electric Power
+Das vorliegende Repository positioniert sich im Kern als **regelungstechnische Machbarkeitsstudie** für RL auf einem Tiefsetzsteller. Charakteristisch sind dabei:
 
-**Quelle:**  
-Repository: `tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs`  
-<https://github.com/tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs>
+- physikalisch motivierte Zustandsgrößen wie \(i_L\) und \(u_C\),
+- eine direkt lernende Policy für \(\tau_g\),
+- der Verzicht auf eine klassische PI- oder MPC-Reglerstruktur als eigentlichen Regler,
+- ein sukzessiver Ausbau von der einfachen Referenzfolge hin zu Stör- und Robustheitsfragen.
 
-Im README dieses Repositories werden direkt drei thematisch passende Paper genannt:
+Damit liegt das Projekt in einem Forschungsfeld, das zwischen **datengetriebener Regelung**, **RL in physikalischen Systemen** und **Leistungselektronikregelung** angesiedelt ist.
 
-1. **Voltage Regulation of DC-DC Buck Converters Feeding CPLs via Deep Reinforcement Learning**  
+---
+
+## 4. Wissenschaftliche Literaturübersicht
+
+### 4.1 Hochrelevante wissenschaftliche Quellen
+
+#### 4.1.1 Yang et al.: RL-basierte Spannungsregelung von Buck-Konvertern mit CPL
+
+Im Repository `tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs` werden drei einschlägige Arbeiten genannt:
+
+1. **Voltage Regulation of DC-DC Buck Converters Feeding CPLs via Deep Reinforcement Learning**
+2. **Implementation of Transferring Reinforcement Learning for DC–DC Buck Converter Control via Duty Ratio Mapping**
+3. **Robustness enhancement of DRL controller for DC–DC buck converters fusing ESO**
+
+Diese Arbeiten sind für das vorliegende Repository von **höchster Relevanz**, weil sie die gleiche Grundlogik verfolgen:
+
+- Buck-Konverter als Regelstrecke,
+- RL als primäre Reglerinstanz,
+- direkte Beeinflussung des **Duty-Ratio**,
+- Spannungsregelung als Zielgröße.
+
+Aus wissenschaftlicher Sicht ist besonders bedeutsam, dass hier nicht nur eine abstrakte RL-Idee formuliert wird, sondern ein **konkretes Anwendungsfeld der Leistungselektronik** adressiert wird. Die Arbeiten belegen damit, dass RL für DC-DC-Wandlerregelung nicht nur konzeptionell denkbar, sondern bereits als Forschungsgegenstand etabliert ist.
+
+**Passung zum Repo:** sehr hoch.
+
+**Wesentliche Abweichung:**  
+Der Schwerpunkt dieser Arbeiten liegt auf **Constant Power Loads (CPL)**. Das ist gegenüber einer reinen ohmschen Last ein anspruchsvolleres Lastmodell. Für das hiesige Repository bedeutet das: Die Grundidee ist bereits vorhanden, jedoch kann die eigene Arbeit durch eine klare Behandlung von **ohmscher Last, Lastsprung und normiertem Grundmodell** weiterhin einen eigenständigen Beitrag leisten.
+
+---
+
+#### 4.1.2 Lee et al.: RL-Regelung eines Buck-Konverters unter Berücksichtigung von Zeitverzögerungen
+
+Das Repository `KimDaevvon/RL_Buck_Converter` verweist explizit auf die Arbeit:
+
+**Reinforcement Learning-Based Control of DC–DC Buck Converter Considering Controller Time Delay** (2024).
+
+Diese Quelle ist wissenschaftlich besonders relevant, weil sie das Grundproblem über das reine Machbarkeitsszenario hinaus erweitert. Die Berücksichtigung von **Controller-Zeitverzögerungen** adressiert einen für die praktische Regelung entscheidenden Aspekt, der in idealisierten RL-Umgebungen häufig zunächst ausgeblendet wird.
+
+**Passung zum Repo:** hoch.
+
+**Wissenschaftliche Bedeutung:**  
+Die Arbeit zeigt, dass RL-basierte Buck-Regelung nicht nur unter idealisierten Simulationsannahmen untersucht wird, sondern bereits in Richtung **implementierungsnaher Randbedingungen** weiterentwickelt wurde. Für eine wissenschaftliche Arbeit ist das wichtig, weil sich daraus eine Entwicklungslinie ableiten lässt:
+
+1. gemitteltes Idealmodell,  
+2. Referenz- und Lastvariation,  
+3. Berücksichtigung realer Verzögerungen,  
+4. später ggf. Hardwaretransfer.
+
+---
+
+### 4.2 Teilweise hochrelevante, methodisch nahe Quellen
+
+#### 4.2.1 DDPG für Buck-Konverter
+
+Das Repository `pabloajimenezc/DDPG-DC-DC-Converter` beschreibt eine MATLAB-/Simulink-Umgebung, in der ein **DDPG-Agent** für die Regelung eines DC-DC-Buck-Konverters trainiert wird.
+
+Aus wissenschaftlicher Perspektive ist diese Quelle vor allem deshalb relevant, weil sie den Übergang von der allgemeinen Fragestellung „Kann RL einen Buck-Konverter regeln?“ hin zur konkreten Wahl eines **kontinuierlichen Actor-Critic-Verfahrens** markiert. DDPG ist insbesondere dann naheliegend, wenn das Tastverhältnis nicht nur aus einer kleinen diskreten Menge, sondern als nahezu kontinuierliche Stellgröße behandelt werden soll.
+
+**Passung zum Repo:** hoch.
+
+**Abweichung:**  
+Die öffentlich sichtbare Materiallage ist stärker implementierungsorientiert als theoretisch begründet. Als Primärquelle für eine wissenschaftliche Argumentation ist dieses Repository daher schwächer als die paper-nahen Yang-Arbeiten, aber als methodischer Nachweis weiterhin wertvoll.
+
+---
+
+#### 4.2.2 Reinforcement Learning als Duty-Cycle-Regler eines Buck-Konverters
+
+Das Repository `abdalremal/Power-Converter-RL` beschreibt RL ausdrücklich als Verfahren zur Regelung des Duty-Cycle und damit der Ausgangsspannung eines 24:12V-Buck-Konverters. Im sichtbaren MATLAB-Code werden Beobachtungen wie **integrierter Fehler, Fehler und Ausgangsspannung** sowie ein **DDPG-Agent** verwendet.
+
+Für eine wissenschaftliche Einordnung ist diese Quelle interessant, weil sie zeigt, dass es innerhalb des Themenfelds zwei nahe, aber unterschiedliche Modellierungsphilosophien gibt:
+
+- **physikalisch strukturierte Zustandswahl** wie \(i_L, u_C\),
+- **tracking-orientierte Beobachtungswahl** wie Fehler, integrierter Fehler, Ausgangsspannung.
+
+**Passung zum Repo:** hoch.
+
+**Abweichung:**  
+Das hier beschriebene Repository arbeitet stärker mit fehlerbasierten Beobachtungen; das hiesige Projekt ist stärker an einer regelungstechnisch-physikalischen Zustandsbeschreibung orientiert.
+
+---
+
+### 4.3 Methodisch verwandte, aber nicht deckungsgleiche Literatur
+
+#### 4.3.1 PPO-LSTM für Buck-Boost-Konverter
+
+Das Repository `KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l` dokumentiert eine RL-Regelung eines **Buck-Boost-Konverters** mittels **PPO** und rekurrenten Anteilen.
+
+Wissenschaftlich ist diese Quelle vor allem für die **Methodenwahl** relevant. Sie zeigt:
+
+- PPO ist im Wandlerkontext einsetzbar,
+- rekurrente Strukturen werden genutzt, wenn zeitliche Abhängigkeiten besonders wichtig sind,
+- der RL-Einsatz ist nicht auf Buck-Konverter beschränkt, sondern auf verwandte Topologien ausdehnbar.
+
+**Passung zum Repo:** mittel bis hoch.
+
+**Abweichung:**  
+Topologie und Lastannahme unterscheiden sich; daher ist diese Quelle eher für den **Methodenvergleich** als für den direkten Stand-der-Technik-Abgleich geeignet.
+
+---
+
+#### 4.3.2 Hybridregelung aus PID und RL
+
+Das Repository `PVasantharajan/rl-dc-dc-converter-control` beschreibt einen Buck-Konverter im **averaged model**, kombiniert jedoch klassische PID-Schleifen mit einem PPO-basierten Residualagenten.
+
+Diese Quelle ist wissenschaftlich relevant, weil sie eine alternative Position im Forschungsfeld sichtbar macht: RL wird nicht zwingend als vollständiger Ersatz klassischer Regelung, sondern auch als **Ergänzung oder Residualregler** eingesetzt.
+
+**Passung zum Repo:** mittel.
+
+**Abweichung:**  
+Das hier verfolgte Repository möchte gerade keinen klassischen Regler als zentrale Regelstrategie verwenden. Damit markiert diese Quelle eher einen **Kontrastfall** innerhalb der Literatur.
+
+---
+
+## 5. Synthese der Literatur
+
+Die ausgewerteten wissenschaftlichen Quellen lassen drei zentrale Aussagen zu:
+
+### 5.1 Die Grundidee ist nicht neu
+
+Die Kombination aus
+
+- Buck-Konverter,
+- RL-basierter Regelung,
+- direkter oder nahezu direkter Duty-Cycle-Bildung,
+- Spannungsregelung als Ziel
+
+ist bereits mehrfach untersucht worden. Insbesondere die Yang-Arbeiten belegen dies sehr deutlich.
+
+### 5.2 Der wissenschaftliche Mehrwert liegt in der konkreten Ausgestaltung
+
+Neuheit entsteht im vorliegenden Themenfeld weniger durch die bloße Verwendung von RL, sondern durch:
+
+- die **präzise Modellwahl**,
+- die **Zustands- und Beobachtungsdefinition**,
+- die **Lastmodellierung**,
+- die **Robustheitsbetrachtung**,
+- und den **Vergleich zu klassischer Regelung**.
+
+Für dieses Repository sind daher insbesondere folgende wissenschaftliche Beiträge denkbar:
+
+1. systematischer Vergleich verschiedener RL-Verfahren unter identischer Strecke,  
+2. Untersuchung der Beobachtbarkeit von Störgrößen wie \(z\),  
+3. Vergleich von physikalisch motivierten und fehlerbasierten Beobachtungsvektoren,  
+4. geordneter Übergang vom idealen gemittelten Modell zu realistischeren Szenarien.
+
+### 5.3 Das Repo ist als wissenschaftlich strukturierte Reproduktions- und Vergleichsarbeit gut begründbar
+
+Auch wenn die Grundidee bereits bekannt ist, bleibt die Arbeit wissenschaftlich sinnvoll. Gerade in der Regelungstechnik ist eine **saubere Reproduktion**, **systematische Variation der Modellannahmen** und **transparente Methodik** häufig wertvoller als ein nur formal neuer, aber schlecht nachvollziehbarer Ansatz.
+
+---
+
+## 6. Gesonderte Übersicht öffentlicher GitHub-Repositories
+
+Die folgenden Repositories werden **bewusst getrennt** von der eigentlichen Literaturübersicht aufgeführt. Sie sind als **Implementierungs-, Reproduktions- oder Demonstrationsquellen** nützlich, besitzen aber nicht automatisch den Status einer begutachteten wissenschaftlichen Primärquelle.
+
+### 6.1 Repositories mit sehr hoher Relevanz
+
+1. **tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs**  
+   Sehr hohe Relevanz, da direkt Paper-bezogen und thematisch nahezu deckungsgleich.
+
+2. **KimDaevvon/RL_Buck_Converter**  
+   Hohe Relevanz als Reproduktionsquelle mit explizitem Bezug auf ein Buck-RL-Paper.
+
+3. **pabloajimenezc/DDPG-DC-DC-Converter**  
+   Hohe Relevanz als konkrete MATLAB-/Simulink-Implementierung für Buck + DDPG.
+
+4. **abdalremal/Power-Converter-RL**  
+   Hohe Relevanz, da RL explizit als Duty-Cycle-Regler für Buck-Spannungsregelung formuliert wird.
+
+### 6.2 Repositories mit mittlerer Relevanz
+
+5. **KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l**  
+   Methodisch sehr interessant, aber andere Wandlerstruktur.
+
+6. **PVasantharajan/rl-dc-dc-converter-control**  
+   Relevant als Hybridansatz, jedoch nicht als rein RL-basierter Regler.
+
+7. **Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems**  
+   Besonders interessant für spätere Hardwareperspektive, aber nur teilweise deckungsgleich mit dem Grundmodell dieses Repositories.
+
+### 6.3 Repositories mit eher angrenzender Relevanz
+
+8. **SmartSystems-UniAndes/Train_and_Convert_RL_MPPT**  
+   Relevant als RL-Anwendung am Buck-Konverter, jedoch mit Schwerpunkt MPPT statt klassischer Spannungsregelung.
+
+---
+
+## 7. Schlussfolgerung für eine wissenschaftliche Arbeit
+
+Für eine wissenschaftliche Arbeit lässt sich der Stand der Recherche wie folgt verdichten:
+
+1. **Die Grundidee ist bereits umgesetzt worden.**  
+   RL-basierte Buck-Regelung über Duty-Cycle ist kein unbearbeitetes Neuland mehr.
+
+2. **Die thematisch passendsten Quellen stammen aus der Schnittmenge von RL und Leistungselektronik.**  
+   Besonders relevant sind paper-nahe Arbeiten zu Buck-Konvertern mit Spannungsregelung und direkter Duty-Ratio-Bildung.
+
+3. **Ein tragfähiger wissenschaftlicher Beitrag liegt in der Systematik.**  
+   Das Repository kann dennoch eine sinnvolle wissenschaftliche Arbeit stützen, wenn es nicht bloß „RL auf Buck“ wiederholt, sondern methodisch sauber strukturiert:
+   - klares Grundmodell,
+   - definierte Beobachtungsräume,
+   - definierte Lastfälle,
+   - nachvollziehbarer Vergleich klassischer und RL-basierter Regelung,
+   - Auswertung von Robustheit und Generalisierungsverhalten.
+
+4. **Die GitHub-Repositories sollten in einer Arbeit nicht mit Paperquellen vermischt werden.**  
+   Sie sind als Implementierungs- und Reproduktionsbelege wertvoll, sollten aber formal gesondert von der Primärliteratur geführt werden.
+
+---
+
+## 8. Literaturverzeichnis
+
+### 8.1 Wissenschaftliche bzw. paper-nahe Quellen
+
+1. Yang, T. et al.: **Voltage Regulation of DC-DC Buck Converters Feeding CPLs via Deep Reinforcement Learning**. IEEE Xplore.  
    <https://ieeexplore.ieee.org/abstract/document/9521987>
-2. **Implementation of Transferring Reinforcement Learning for DC–DC Buck Converter Control via Duty Ratio Mapping**  
+
+2. Yang, T. et al.: **Implementation of Transferring Reinforcement Learning for DC–DC Buck Converter Control via Duty Ratio Mapping**. IEEE Xplore.  
    <https://ieeexplore.ieee.org/abstract/document/9841427>
-3. **Robustness enhancement of DRL controller for DC–DC buck converters fusing ESO**  
+
+3. Yang, T. et al.: **Robustness enhancement of DRL controller for DC–DC buck converters fusing ESO**. Taylor & Francis.  
    <https://www.tandfonline.com/doi/full/10.1080/23307706.2023.2201587>
 
-**Warum sehr relevant:**  
-- Buck-Konverter  
-- direkte RL-Regelung  
-- Fokus auf Spannungsregelung  
-- explizit auf **Duty-Ratio / Duty-Cycle-Control**
+4. Lee, D. et al. (laut Reproduktionsrepository): **Reinforcement Learning-Based Control of DC–DC Buck Converter Considering Controller Time Delay** (2024).  
+   Paperhinweis über: <https://github.com/KimDaevvon/RL_Buck_Converter>
 
-**Passung zum Repo:** **sehr hoch**
-
-**Wichtige Unterschiede:**  
-- der Fokus liegt dort stark auf **Constant Power Loads (CPL)** und damit auf einer anspruchsvolleren Lastklasse,  
-- nicht primär auf der im hiesigen Repo beschriebenen ohmschen Last bzw. Lastsprung-Betrachtung.
-
-**Bewertung:**  
-Diese Quelle ist die stärkste Bestätigung dafür, dass die Grundidee „**Buck + RL + direkte Duty-Cycle-Regelung**“ bereits wissenschaftlich umgesetzt wurde.
-
----
-
-### 2) Reproduktion eines Papers zu Buck-Convertern mit RL und Zeitverzögerung
-
-**Quelle:**  
-Repository: `KimDaevvon/RL_Buck_Converter`  
-<https://github.com/KimDaevvon/RL_Buck_Converter>
-
-Öffentliche Repository-Beschreibung:
-
-> “Reproduction of a reinforcement learning controller for a DC–DC buck converter (based on: Donghun Lee et al., "Reinforcement Learning-Based Control of DC–DC Buck Converter Considering Controller Time Delay", 2024)”
-
-**Warum relevant:**  
-- erneut **Buck-Konverter**  
-- erneut **RL-basierte Regelung**  
-- expliziter Verweis auf eine wissenschaftliche Arbeit
-
-**Passung zum Repo:** **hoch**
-
-**Wichtige Unterschiede:**  
-- Schwerpunkt auf **Controller-Zeitverzögerungen**, also einem praxisnäheren Aspekt,  
-- damit bereits einen Schritt weiter als das im Repo formulierte ideale Machbarkeitsszenario.
-
-**Bewertung:**  
-Diese Quelle ist besonders wichtig, weil sie zeigt, dass das Thema nicht nur als Machbarkeitsstudie existiert, sondern bereits in Richtung **realistischere Implementierungsbedingungen** weitergedacht wurde.
-
----
-
-### 3) DDPG-Implementierung für Buck-Konverter
-
-**Quelle:**  
-Repository: `pabloajimenezc/DDPG-DC-DC-Converter`  
-<https://github.com/pabloajimenezc/DDPG-DC-DC-Converter>
-
-Öffentliche Repository-Beschreibung:
-
-> “With these you can run and train a custom reinforcement learning DDPG agent to control a DC-DC Buck Converter.”
-
-**Warum relevant:**  
-- Buck-Konverter  
-- kontinuierliche RL-Regelung mit **DDPG**  
-- MATLAB/Simulink-Umfeld
-
-**Passung zum Repo:** **hoch**
-
-**Wichtige Unterschiede:**  
-- die öffentlich sichtbaren Informationen sind knapper als bei den Paper-nahen Repositories,  
-- der Schwerpunkt liegt stärker auf der **praktischen Agentenimplementierung** als auf einer ausführlichen theoretischen Einordnung.
-
-**Bewertung:**  
-Die Quelle ist ein klarer Beleg dafür, dass die direkte RL-Regelung eines Buck-Konverters nicht nur theoretisch beschrieben, sondern auch als trainierbare MATLAB/Simulink-Umgebung öffentlich umgesetzt wurde.
-
----
-
-### 4) Frühe Buck-Converter-RL-Arbeit mit Fokus auf Ausgangsspannung
-
-**Quelle:**  
-Repository: `abdalremal/Power-Converter-RL`  
-<https://github.com/abdalremal/Power-Converter-RL>
-
-README-Auszug:
-
-> “Reinforcement learning as a control technique for the duty cycle, and therefore output voltage, of a 24:12V buck converter using IGBT's.”
-
-Im sichtbaren MATLAB-Code `Environment_actions_and_observations.m` wird zudem ein RL-Setup mit:
-
-- Beobachtungen: **integrated error, error, voltage**
-- **DDPG-Agent**
-- Simulink-Umgebung
-
-beschrieben.
-
-**Warum relevant:**  
-- Buck-Konverter  
-- direkte Verknüpfung von **Duty Cycle** und **Ausgangsspannung**  
-- klarer Bezug zur Regelungsaufgabe
-
-**Passung zum Repo:** **hoch**
-
-**Wichtige Unterschiede:**  
-- stärker fehlerbasierte Beobachtungsdefinition statt physikalisch motivierter Zustandsgrößen wie \(i_L\) und \(u_C\),  
-- damit konzeptionell etwas näher an einer klassischen Tracking-Sicht als an einer physikalisch strukturierten Zustandsbeschreibung.
-
-**Bewertung:**  
-Sehr relevante Quelle, weil sie die gleiche Grundregelungsaufgabe adressiert, aber mit einem anderen Zustands-/Beobachtungsdesign.
-
----
-
-## Teilweise relevante Quellen
-
-### 5) PPO-LSTM für Buck-Boost-Wandler mit CPL
-
-**Quelle:**  
-Repository: `KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l`  
-<https://github.com/KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l>
-
-Im sichtbaren MATLAB-Code `PPO_DRL_Code.m` werden u. a. beschrieben:
-
-- **PPO-Agent**
-- **LSTM/RNN-Nutzung**
-- diskreter Duty-Cycle-Aktionsraum
-- Spannungsreferenz `V_ref`
-- Simulink-Environment für einen **buck_boost_model**
-
-**Warum relevant:**  
-- sehr ähnliche Methodik: RL regelt direkt den Wandler  
-- direkter Bezug zu Duty-Cycle-Entscheidungen  
-- gut geeignet als Vergleich für Algorithmuswahl
-
-**Passung zum Repo:** **mittel bis hoch**
-
-**Wichtige Unterschiede:**  
-- **Buck-Boost** statt Buck,  
-- LSTM-basierter Ansatz,  
-- Lastszenario mit CPL.
-
-**Bewertung:**  
-Methodisch sehr nützlich, fachlich aber nicht ganz so präzise passend wie die Buck-spezifischen Quellen.
-
----
-
-### 6) RL für Buck-Konverter im Batterie-Ladefall
-
-**Quelle:**  
-Repository: `PVasantharajan/rl-dc-dc-converter-control`  
-<https://github.com/PVasantharajan/rl-dc-dc-converter-control>
-
-README-Kernaussagen:
-
-- Buck-Konverter als **averaged model**
-- Kombination aus **PID-Regelung + PPO-Residualagent**
-- Ziel ist sicheres und effizientes Laden
-
-**Warum relevant:**  
-- ebenfalls RL im Umfeld eines Buck-Konverters  
-- ebenfalls Regelungsaufgabe im physikalischen System
-
-**Passung zum Repo:** **mittel**
-
-**Wichtige Unterschiede:**  
-- kein rein RL-basierter Regler, sondern **hybrider Ansatz**,  
-- Anwendungsziel ist Batterieladung statt generische Spannungsregelung des Wandlers.
-
-**Bewertung:**  
-Gut als angrenzende Quelle, aber nicht die beste Referenz für das hier verfolgte „reine RL-Policy statt klassischer Regler“-Leitbild.
-
----
-
-### 7) RL auf echter Hardware / leistungselektronische Systeme
-
-**Quelle:**  
-Repository: `Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems`  
-<https://github.com/Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems>
-
-Öffentliche Repository-Beschreibung:
-
-> “AI based model-free and system-independent control of power electronic systems (Master thesis code)”
-
-In `rl_control_util.py` ist sichtbar:
-
-- Verwendung von **tf-agents / DDPG**
-- kontinuierlicher Aktionsraum für den **Duty Cycle**
-- hardwarebezogene Systemgrenzen und PWM-/ADC-Anbindung
-- Beobachtungsvektor aus **Ausgang, Referenz, Fehler, Aktion**
-
-**Warum relevant:**  
-- zeigt, dass RL-Regelung leistungselektronischer Systeme auch **hardware-nah** umgesetzt wurde,  
-- bestätigt die Übertragbarkeit von RL-Regelung aus der Simulation in reale Systeme.
-
-**Passung zum Repo:** **mittel**
-
-**Wichtige Unterschiede:**  
-- stärker hardware- und implementierungsorientiert,  
-- keine klare Fokussierung allein auf das in diesem Repo beschriebene normierte Grundmodell.
-
-**Bewertung:**  
-Sehr wertvoll als Ausblick: Das hiesige Repo könnte langfristig in genau so eine Richtung weiterentwickelt werden.
-
----
-
-### 8) RL für MPPT mit Buck-Konverter
-
-**Quelle:**  
-Repository: `SmartSystems-UniAndes/Train_and_Convert_RL_MPPT`  
-<https://github.com/SmartSystems-UniAndes/Train_and_Convert_RL_MPPT>
-
-README-Kernaussagen:
-
-- Training von RL-Agenten in MATLAB/Simulink
-- Bezug zu **Buck Converter**
-- Deployment-Richtung via TensorFlow Lite / Raspberry Pi
-- Anwendungsfall: **Maximum Power Point Tracking**
-
-**Warum relevant:**  
-- ebenfalls RL + Buck-Konverter  
-- ebenfalls leistungselektronischer Regelungskontext
-
-**Passung zum Repo:** **niedrig bis mittel**
-
-**Wichtige Unterschiede:**  
-- Zielgröße ist nicht primär klassische Spannungsregelung, sondern **MPPT**.
-
-**Bewertung:**  
-Methodisch interessant, aber thematisch deutlich weiter weg als die Buck-Spannungsregler-Quellen.
-
----
-
-## Gesamtbewertung der Passung
-
-### Was bereits klar umgesetzt wurde
-
-Folgende Kernelemente des Repos sind in der Literatur und in öffentlichen Implementierungen bereits vorhanden:
-
-- RL für **Buck-Konverter**
-- direkte Erzeugung des **Duty-Cycle**
-- **Spannungsregelung** als Ziel
-- MATLAB/Simulink-basierte Trainingsumgebungen
-- Untersuchung dynamischer Lastfälle, insbesondere auch anspruchsvoller Lasten
-
-### Was im Repo dennoch sinnvoll und untersuchbar bleibt
-
-Trotzdem ist das hiesige Projekt weiterhin sinnvoll, wenn es sich auf Punkte konzentriert, die in den gefundenen Quellen **nicht systematisch gleichartig aufbereitet** sind:
-
-1. **klarer physikalischer Einstieg** aus dem normierten Tiefsetzsteller-Modell,  
-2. **transparenter Vergleich zu klassischer Regelung**,  
-3. **schrittweise Eskalation der Schwierigkeit**:
-   - konstanter Sollwert
-   - Sollwertsprung
-   - Rampe
-   - Lastsprung
-4. **systematischer Vergleich mehrerer RL-Verfahren** unter derselben Modellbasis,  
-5. Untersuchung der Frage, ob eine Policy mit Beobachtung \([i_L, u_C]\) bereits genügt oder ob zusätzliche Störinformation \(z\) messbar sein muss.
-
----
-
-## Einordnung der wissenschaftlichen Nähe
-
-### Sehr nahe am Repo-Thema
-
-- Tianxiao-Yang-Arbeiten zu **Buck + DRL + Duty Ratio**
-- KimDaevvon-Reproduktion eines Papers zu **Buck + RL**
-- DDPG- und ähnliche MATLAB/Simulink-Repositories für **Buck-Spannungsregelung**
-
-### Verwandt, aber nicht deckungsgleich
-
-- Buck-Boost-Arbeiten
-- hybride PID+RL-Ansätze
-- MPPT statt Spannungsregelung
-- hardwarefokussierte RL-Implementierungen für leistungselektronische Systeme
-
----
-
-## Schlussfolgerung
-
-Das Konzept dieses Repositories ist **bereits in ähnlicher Form umgesetzt worden**.  
-Insbesondere die Kombination
-
-- **Buck-Konverter**
-- **Reinforcement Learning**
-- **direkte Duty-Cycle-Regelung**
-- **Spannungsregelung**
-
-ist durch mehrere öffentliche Quellen bereits abgedeckt.
-
-Die Recherche spricht daher gegen eine Einordnung als völlig neue Idee, aber klar **für** eine sinnvolle Weiterarbeit an diesem Repo, wenn der Fokus auf einer der folgenden Leistungen liegt:
-
-- saubere wissenschaftliche Reproduktion,
-- systematischer Benchmark verschiedener RL-Verfahren,
-- didaktisch gute Dokumentation,
-- oder robuste Erweiterung auf Störungen, Lastsprünge und realitätsnähere Randbedingungen.
-
----
-
-## Quellenliste
+### 8.2 Gesonderte öffentliche GitHub-Repositories
 
 1. `tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs`  
    <https://github.com/tianxiaoy9/Data-driven-deep-reinforcement-learning-controller-for-DC-DC-buck-converter-feeding-CPLs>
-2. IEEE-Link aus obigem Repository:  
-   <https://ieeexplore.ieee.org/abstract/document/9521987>
-3. IEEE-Link aus obigem Repository:  
-   <https://ieeexplore.ieee.org/abstract/document/9841427>
-4. Taylor & Francis-Link aus obigem Repository:  
-   <https://www.tandfonline.com/doi/full/10.1080/23307706.2023.2201587>
-5. `KimDaevvon/RL_Buck_Converter`  
+
+2. `KimDaevvon/RL_Buck_Converter`  
    <https://github.com/KimDaevvon/RL_Buck_Converter>
-6. `pabloajimenezc/DDPG-DC-DC-Converter`  
+
+3. `pabloajimenezc/DDPG-DC-DC-Converter`  
    <https://github.com/pabloajimenezc/DDPG-DC-DC-Converter>
-7. `abdalremal/Power-Converter-RL`  
+
+4. `abdalremal/Power-Converter-RL`  
    <https://github.com/abdalremal/Power-Converter-RL>
-8. `KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l`  
+
+5. `KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l`  
    <https://github.com/KevinKoay/PPO-LSTM-deep-reinforcement-learning-based-controller-for-buck-boost-converter-with-constant-power-l>
-9. `PVasantharajan/rl-dc-dc-converter-control`  
+
+6. `PVasantharajan/rl-dc-dc-converter-control`  
    <https://github.com/PVasantharajan/rl-dc-dc-converter-control>
-10. `Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems`  
-    <https://github.com/Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems>
-11. `SmartSystems-UniAndes/Train_and_Convert_RL_MPPT`  
-    <https://github.com/SmartSystems-UniAndes/Train_and_Convert_RL_MPPT>
+
+7. `Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems`  
+   <https://github.com/Solaire-42/RaspberryPyReinforcementLearningControlPowerElectronicSystems>
+
+8. `SmartSystems-UniAndes/Train_and_Convert_RL_MPPT`  
+   <https://github.com/SmartSystems-UniAndes/Train_and_Convert_RL_MPPT>
