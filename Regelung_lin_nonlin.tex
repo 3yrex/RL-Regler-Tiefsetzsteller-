@@ -1,0 +1,166 @@
+\chapter{Herkömmliche Regelung der linearen und nichtlinearen Regelstrecke} \label{Kapitel_Regelung_lin_nonlin}
+In diesen Kapitel wird die Auslegung der Regler für die lineare und nichtlineare \\ Regelstrecke beschrieben.
+Aufgrund der Nichtlinearität des Hochsetzstellers wie in\\  Abschnitt \ref{Section_Nichtlineare_Regelstrecke} beschrieben, wird in der Auslegung kaskadierte Regelungen verwendet.
+Die Kaskadenregelung besteht aus einer unterlagerten Stromregelung und einer\\ überlagerten Spannungsregelung.
+Für eine bessere Vergleichbarkeit zwischen der\\ linearen und nichtlinearen Regelstrecke wird auch für die lineare Regelstrecke eine \\kaskadierte Regelung verwendet.
+Ein Antiwindup kommt zum Einsatz, um den \\Integrator abzustellen, wenn die Stellreserve ausgeschöpft ist.
+\\Das Einschwingverhalten der Kaskadenregelung von Tief- und Hochsetzstellern basiert auf dem Einschwingverhalten eines Tiefpass kritischer Dämpfung.
+In den folgenden\\  Abschnitten beschreibt diese Arbeit die Auslegung der kaskadierten Regelung des \\Hoch- und Tiefsetzstellers.
+\newpage
+\section{Lineare Regelstrecke}
+Für die Auslegung der kaskadierten Regelung des Tiefsetzstellers wird das \\ regelungstechnische Blockschaltbild, hergeleitet aus dem physikalischen Modell des Tiefsetzstellers (siehe Abschnitt \ref{Section_lineare_Regelstrecke}), verwendet. \\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{TSS_RBS.pdf}
+	\caption{Regelungstechnisches Blockschaltbild des Tiefsetzstellers}
+\end{figure} 
+
+\newpage
+\subsection{Auslegung der unterlagerten Stromregelung}\label{Section_Unterlagerte_Stromregelung_TSS}
+Wie in Abbildung \ref{TSS_Stromregelung} dargestellt, entsteht ein Regelsystem nach dem Prinzip der \\Rückführung eines vollständigen Satzes von Zustandsvariablen (siehe Abschnitt \ref{Rückführung_vollständiger_Zustandsvariablen}).
+\newline
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=16cm]{TSS_Stromregelung.pdf}
+	\caption{Stromregelung des Tiefsetzstellers}
+	\label{TSS_Stromregelung}
+\end{figure} \\ \noindent
+Die Auslegung der Einstellparameter $K$ und $K_1$ erfolgt mithilfe der\\ Übertragungsfunktion.
+\begin{align}
+    \ILEAvar{F}{R}(p) &= \frac{\ILEAvar{i}{L}}{\ILEAvar{i}{L,soll}}  \\
+    \ILEAvar{F}{R}(p) &= \frac{K}{\ILEAvar{K}{1} K + p \ILEAvar{T}{L}} \\
+    \ILEAvar{F}{R}(p) &\widehat{=} \ILEAvar{K}{w} \cdot \frac{1}{1 + p \ILEAvar{T}{Strom}} 
+\end{align}
+\noindent
+Durch Koeffizientenvergleich und der Bedingung des Eingeschaftsparameter $\ILEAvar{K}{w} = 1$ (siehe Abschnitt \ref{Rückführung_vollständiger_Zustandsvariablen}) ergeben sich die Einstzellparameter.
+\begin{align}
+    \ILEAvar{K}{1} &= \frac{1}{\ILEAvar{K}{w}} \\
+    K &= \frac{T_L}{\ILEAvar{K}{1} \ILEAvar{T}{Strom}} = \frac{\ILEAvar{T}{L}}{\ILEAvar{T}{Strom}}
+\end{align}
+Die Rückkopplung der Ausgangsspannung $\ILEAvar{u}{C}$ über den Parameter $\ILEAvar{K}{2}$ dient der \\ Auflösung der Kreisschaltung, verursacht durch die Vorkopplung der \\ Ausgangsspannung. 
+Für die Störgrößenkompensation gilt.
+\begin{align}
+	\ILEAvar{K}{2} = -\frac{1}{K} = - \frac{\ILEAvar{T}{Strom}}{\ILEAvar{T}{L}}
+\end{align}
+Die unterlagerte Stromregelung muss deutlich schneller ausgelegt werden als die \\ überlagerte Spannungsregelung, damit der unterlagerte Regler als eingeschwungen betrachtet werden kann. 
+Typischerweise wird ein Verhältnis der Zeitkonstanten von $\ILEAvar{T}{Strom} : \ILEAvar{T}{Spannung} \approx 1:10$ angestrebt.
+\newpage
+\subsection{Auslegung der überlagerten Spannungsregelung}
+Aufgrund der genannten Bedingung der Zeitkonstanten in Abschnitt \ref{Section_Unterlagerte_Stromregelung_TSS} gilt die \\ Annahme, dass die unterlagerte Stromregelung bereits eingeschwungen ist.
+Damit kann die Auslegung der Spannungsregelung die unterlagerte Stromregelung \\unberücksichtigt lassen und es gilt $\ILEAvar{i}{L,soll} = \ILEAvar{i}{L}$.
+Der Laststrom $\ILEAvar{i}{R}$ stellt eine Störgröße dar und bleibt daher in der Berechnung der Übertragungsfunktion unberücksichtigt.
+Zuerst erfolgt die Betrachtung des Systems ohne Bypass-I-Regler.
+\newline
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=16cm]{TSS_Spannungsregelung_ohne_Bypass.pdf}
+	\caption{Überlagerte Spannungsregelung des Tiefsetzstellers ohne Bypass-I-Regler}
+	\label{Überlagerte_Spannungsregelung_ohne_Bypass_TSS}
+\end{figure} \\ \noindent
+Die Übertragungsfunktion des Systems ohne Bypass-I-Regler ist.
+\begin{align}
+	\ILEAvar{F}{R}(p)  &= \frac{u_{C}}{\ILEAvar{u}{C,soll}^{*}}  \\
+	\ILEAvar{F}{R}(p) &= \frac{C}{C \ILEAvar{C}{1} + p \ILEAvar{T}{C}} \\
+	\ILEAvar{F}{R}(p) &\widehat{=}\ILEAvar{C}{w}^{*} \cdot \frac{1}{1 + p \ILEAvar{T}{Sp}^{*}} 
+\end{align}
+Damit ergeben sich die Einstellparameter zu.
+\begin{align}
+	\ILEAvar{C}{1} &= \frac{C}{C \ILEAvar{C}{w}^{*}} \\
+	C &= \frac{\ILEAvar{T}{C}}{\ILEAvar{T}{Sp}^{*} \ILEAvar{C}{1}}
+\end{align}
+\newpage \noindent
+Der Bypass-I-Regler dient zur Kompensation einer stationären Sollwertabweichung und ist in Abbildung \ref{TSS_Spannungsregelung} zur Spannungsregelung hinzugefügt.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=16cm]{TSS_Spannungsregelung.pdf}
+	\caption{Spannungsregelung des Tiefsetzstellers}
+	\label{TSS_Spannungsregelung}
+\end{figure}  \\ \noindent
+Hierzu wird die Übertragungsfunktion mit folgenden Ansätzen betrachtet wie in\\  Abschnitt \ref{Bypass} beschrieben.
+\begin{align}
+	\frac{1}{\ILEAvar{C}{w}^{*}} &= 1 + \frac{T_{Sp}}{T_{I}} \\
+	\frac{1}{\ILEAvar{C}{w}^{*}} \ILEAvar{T}{Sp}^{*} &= T \cdot \left( 1 + \ILEAvar{q}{2} \frac{\ILEAvar{T}{Sp}}{\ILEAvar{T}{I}} \right) 
+\end{align}
+Damit ergibt sich die Einstellparameter.
+\begin{align}
+	\ILEAvar{C}{w}^{*} &= \frac{1}{1 + \frac{T_{Sp}}{T_{I}}} \\
+	\ILEAvar{C}{1} &= \frac{1}{\ILEAvar{C}{w}^{*}} \\
+	C &= \frac{\ILEAvar{T}{C}}{\ILEAvar{T}{Sp}^{*} \ILEAvar{C}{1}}
+\end{align}
+Und der Eigenschaftsparameter.
+\begin{align}
+	\ILEAvar{T}{Sp}^{*} &= \ILEAvar{T}{Sp} \cdot \left( 1 + \ILEAvar{q}{2} \frac{\ILEAvar{T}{Sp}}{\ILEAvar{T}{I}} \right) 
+\end{align}
+\newpage
+\section{Nichtlineare Regelstrecke}
+Für die Auslegung der kaskadierten Regelung des Hochsetzstellers dient das \\ regelungstechnische Blockschaltbild, das auf Basis des physikalischen Modells des Hochsetzstellers abgeleitet wurde (siehe Abschnitt \ref{Section_Nichtlineare_Regelstrecke}).
+Die ursprünglich nichtlineare Übertragungsfunktion des Hochsetzstellers wird mittels geeigneter Umrechnungswerke linearisiert. 
+Diese Umrechnungswerke erfassen die nichtlinearen Zusammenhänge \\ zwischen den relevanten Größen des Hochsetzstellers, wie in Abschnitt \ref{PhyM_HSS} \\ beschrieben, sodass im Rahmen der Reglerauslegung die Nichtlinearitäten \\ vernachlässigt werden können.
+\newline
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{HSS_RBS_2.pdf}
+	\caption{Regelungstechnisches Blockschaltbild des Hochsetzstellers}
+	\label{RBS_HSS2}
+\end{figure} 
+\newpage
+\subsection{Auslegung der unterlagerten Stromregelung} \label{Section_Unterlagerte_Stromregelung}
+Wie in Abbildung \ref{HSS_Stromregelung} dargestellt, entsteht ein Regelsystem nach dem Prinzip der\\  Rückführung eines vollständigen Satzes von Zustandsvariablen (siehe Abschnitt \ref{Rückführung_vollständiger_Zustandsvariablen}). \\ 
+\newline
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=16cm]{HSS_Stromregler.pdf}
+	\caption{Schaltbild eines Hochsetzstellers}
+	\label{HSS_Stromregelung}
+\end{figure} \\ \noindent
+Die Auslegung der Einstellparameter $K$ und $\ILEAvar{K}{1}$ erfolgt mithilfe der\\  Übertragungsfunktion.
+\begin{align}
+    \ILEAvar{F}{R}(p) &= \frac{\ILEAvar{i}{L}}{\ILEAvar{i}{L,soll}}  \\
+    \ILEAvar{F}{R}(p) &= \frac{K}{\ILEAvar{K}{1}K + p\ILEAvar{T}{L}} \\
+    \ILEAvar{F}{R}(p) &\widehat{=} \ILEAvar{K}{w} \cdot \frac{1}{1 + p \ILEAvar{T}{Strom}}
+\end{align}
+Im eingeschwungen Zustand soll $\ILEAvar{i}{L,soll} $ gleich $\ILEAvar{i}{L}$ sein (siehe \ref{Rückführung_vollständiger_Zustandsvariablen}). Daher wird $\ILEAvar{K}{w}$ wie folgt gewählt.
+\begin{align}
+    \ILEAvar{K}{w} &= 1 
+\end{align}
+\newpage \noindent
+Es ergibt sich für die Einstellparameter.
+\begin{align}
+    \ILEAvar{K}{1} &= \frac{1}{\ILEAvar{K}{w}} \\
+    K &= \frac{\ILEAvar{T}{L}}{\ILEAvar{K}{1} \ILEAvar{T}{Strom}} 
+\end{align} \\ \noindent
+Damit die Sollvorgabe des Stromreglers in die Stellgröße umgerechnet werden kann, muss das Steuergesetz mittels eines Umrechenwerkes beachtet werden.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=10cm]{HSS_U2.pdf}
+	\caption{Umrechenwerk}
+	\label{Umrechenwerk2}
+\end{figure}\\ \noindent
+Der Sollwert der Spulenspannung $\ILEAvar{u}{L,soll}$ wird mit der Eingangsspannung $\ILEAvar{u}{in}$ und der Kondensatorspannung $\ILEAvar{u}{C}$ verrechnet, um die Stellgröße, die relative Einschaltdauer, $\ILEAvar{\tau}{g}$ zu erhalten.
+\newpage
+\subsection{Auslegung der überlagerten Spannungsregelung} \label{Section_Überlagerte_Spannungsregelung}
+In Abbildung \ref{HSS_Spannungsregelung} ist die überlagerte Spannungsregelung, das Umrechenwerk und der Bypass-I-Regler dargestellt.
+Die Auslegung erfolgt analog zu der Auslegung der\\ überlagerten Spannungsregelung des Tiefsetzstellers (Abschnitt \ref{TSS_Spannungsregelung}) und wird daher verkürzt dargestellt.
+\\ Das Umrechenwerk berücksichtigt die aus dem Abschnitt \ref{PhyM_HSS} gezeigte Nichtlinearität zwischen $\ILEAvar{i}{L}$ und $\ILEAvar{i}{C}$.
+\newline
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=16cm]{HSS_Spannungsregelung.pdf}
+	\caption{Schaltbild eines Hochsetzstellers}
+	\label{HSS_Spannungsregelung}
+\end{figure}  \\ \noindent
+Hierbei wird der Laststrom $\ILEAvar{i}{R}$ als Störgröße betrachtet und daher in der Auslegung vernachlässigt.
+\begin{align}
+	\ILEAvar{C}{w}^{*} &= \frac{1}{1 + \frac{\ILEAvar{T}{Sp}}{\ILEAvar{T}{I}}} \\
+	\ILEAvar{T}{Sp}^{*} &= \ILEAvar{T}{Sp} \cdot \left( 1 + \ILEAvar{q}{2} \frac{\ILEAvar{T}{Sp}}{\ILEAvar{T}{I}} \right) \\
+	\ILEAvar{C}{1} &= \frac{1}{\ILEAvar{C}{w}^{*}} \\
+	C &= \frac{\ILEAvar{T}{C}}{\ILEAvar{T}{Sp}^{*} \ILEAvar{C}{1}}
+\end{align} \newpage \noindent
+Die Sollwertvorgabe des Kondensatorstroms $\ILEAvar{i}{C,soll}$, wie in Abbildung \ref{Umrechenwerk1} beschrieben, wird über das Umrechenwerk in die Sollwertvorgabe des Spulenstroms $\ILEAvar{i}{L,soll}$ \\ umgerechnet.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8cm]{HSS_U1.pdf}
+    \caption{Umrechenwerk}
+    \label{Umrechenwerk1}
+\end{figure}
+
